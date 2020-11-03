@@ -5,8 +5,8 @@ Marlboro College
 10/10/18
 """
 import datetime
+import requests
 import re
-import urllib2 as urlib
 from bs4 import BeautifulSoup as bs
 
 browser_spoof = {'User-agent' : 'Mozilla/5.0'}
@@ -93,7 +93,10 @@ class Rider:
     def __init__(self, url_id):
 
         temp_url = base_rider_url + str(url_id)
-        self.base_page_soup = bs(urlib.urlopen(urlib.Request(temp_url, headers = browser_spoof)).read(), 'html.parser')
+        
+        # do this with requests
+        response = requests.get(temp_url)
+        self.base_page_soup = bs(response.content,'html.parser')
 
         temp_seasons_list = []
         for element in self.base_page_soup.find_all('a', href=(lambda x: ("?id=" and "&season=" in x) and ("sort" not in x))):
